@@ -1,6 +1,5 @@
 import { Account } from "../../Account"
-
-// const accountsRepository: any = jest.genMockFromModule('../accountsRepository');
+import { resolve } from "dns"
 
 const accounts = {
 '1434597300':
@@ -36,4 +35,18 @@ export const getAccountsAsync = async(): Promise<{}> => {
 export const getAccounts = (): {} => {
     return accounts
 }
+
+export const writeDataToTransactionsCsv = (data) => {
+    for(const entry of data) {
+        if(!accounts[entry.accountId].history) {
+            accounts[entry.accountId].history = [entry]
+        } else {
+            accounts[entry.accountId].history.push(entry)
+        }
+    }
+}
+
+export const runThroughTransactionsData = () => new Promise((resolve, reject) => {
+   resolve()
+})
 

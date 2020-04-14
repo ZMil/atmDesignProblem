@@ -5,6 +5,8 @@ import { actionTypeEnums } from '../constants/actionTypes'
 import { Account } from '../Account'
 import { atm } from '../atm'
 
+import { createObjectCsvWriter } from 'csv-writer'
+
 const accounts = {}
 
 const readInInitialAccountsData = () => new Promise((resolve, reject) => {
@@ -32,19 +34,20 @@ export const runThroughTransactionsData = () => new Promise((resolve, reject) =>
     fs.createReadStream('./data/transactions.csv')
         .pipe(csv())
         .on('data', (row) => {
-            const updatedAccount: Account = accounts[row.ACCOUNT_ID]
-            if(row.ACTION_TYPE === actionTypeEnums.WITHDRAW) {
-                updatedAccount.balance = updatedAccount.balance - row.AMOUNT
-            } else if(row.ACTION_TYPE === actionTypeEnums.DEPOSIT) {
-                updatedAccount.balance = updatedAccount.balance + row.AMOUNT
-                atm.deposit(row.AMOUNT)
+            console.log(row)
+            const updatedAccount: Account = accounts[row.accountId]
+            if(row.actionType === actionTypeEnums.WITHDRAW) {
+                updatedAccount.balance = updatedAccount.balance - row.amount
+            } else if(row.actionType === actionTypeEnums.DEPOSIT) {
+                updatedAccount.balance = updatedAccount.balance + row.amount
+                atm.deposit(row.amount)
             }
             if(!updatedAccount.history) {
                 updatedAccount.history = [row]
             } else {
                 updatedAccount.history.push(row)
             }
-            accounts[row.ACCOUNT_ID] = updatedAccount
+            accounts[row.accountId] = updatedAccount
         })
         .on("error", reject)
         .on('end', async () => {
@@ -67,7 +70,19 @@ export const getAccounts = (): {} => {
     return accounts
 }
 
-// export const getAccounts = () => {
-//     return accounts
-// }
+
+const csvWriter = createObjectCsvWriter({
+    path: 'data/transactions.csv',
+    header: [
+        {id: 'TIME', title: 'time'},
+        {id: 'ACCOUNT_ID', title: 'accountId'},
+        {id: 'ACTION_TYPE', title: 'actionType'},
+        {id: 'AMOUNT', title: 'amount'},
+        {id: 'TOTAL', title: 'total'}
+    ]
+})
+
+export const writeDataToTransactionsCsv = (data) => {
+    csvWriter.writeRecords(data)
+}
 

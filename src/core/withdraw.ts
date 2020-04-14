@@ -1,7 +1,6 @@
 import { getBalance } from './balance'
-import { getAccounts } from './repositories/accountsRepository'
+import { getAccounts, writeDataToTransactionsCsv } from './repositories/accountsRepository'
 import { getCurrAccountId, updateAccount } from './accounts'
-import { writeDataToCsv } from './repositories/transactionsRepository'
 
 import {actionTypeEnums} from './constants/actionTypes'
 
@@ -40,13 +39,13 @@ export const handleWithdrawlCommand = (args) => {
     updateAccount(currAccount)
     atm.withdraw(valueDesired)
 
-    writeDataToCsv([
+    writeDataToTransactionsCsv([
         {
             time: Date.now(),
             accountId: currAccount.accountId,
             actionType: actionTypeEnums.WITHDRAW,
             amount: valueDesired,
-            total: currAccount.balance - valueDesired
+            total: currAccount.balance
         }
     ])
 

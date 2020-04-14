@@ -1,6 +1,6 @@
 import { handleAuthorizeCommand, isAuthorized, getCurrAccountId, unAuthorize } from '../core/accounts'
 
-import { getAccounts, getAccountsAsync } from '../core/repositories/accountsRepository'
+import { getAccountsAsync } from '../core/repositories/accountsRepository'
 
 jest.mock('../core/repositories/accountsRepository')
 
