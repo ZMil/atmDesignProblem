@@ -7,5 +7,5 @@ export const handleLogout = (): string[] => {
         return ['No account is currently authorized.']
     }
     unAuthorize(currAccountId)
-    return [`Account ${currAccountId} is logged out.`]
+    return [`Account ${currAccountId} logged out.`]
 }

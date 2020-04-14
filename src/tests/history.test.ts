@@ -9,6 +9,7 @@ jest.mock('../core/repositories/accountsRepository')
 describe('Accounts Test', () => {
     const accountId = '7089382418'
     const accountPin = '0075'
+
     beforeAll(() => {
         // need to load the initial accounts csv first...
         getAccountsAsync()

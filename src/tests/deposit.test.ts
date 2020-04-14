@@ -6,7 +6,9 @@ jest.mock('../core/repositories/accountsRepository')
 
 describe('Deposit Tests', () => {
     const accountId = '7089382418'
-    handleAuthorizeCommand([accountId, '0075'])
+    const accountPin = '0075'
+
+    handleAuthorizeCommand([accountId, accountPin])
 
     it('handleDepositCommand', () => {
         const beforeBalance = getAccounts()[accountId].balance

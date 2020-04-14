@@ -15,7 +15,7 @@ export const handleWithdrawlCommand = (args) => {
     const accounts = getAccounts()
     const currAccount = accounts[getCurrAccountId()]
     let currBalance = currAccount.balance
-    if(currBalance < 0) {
+    if(currBalance <= 0) {
         return ['Your account is overdrawn! You may not take withdrawals at this time.']
     }
 
@@ -49,7 +49,7 @@ export const handleWithdrawlCommand = (args) => {
         }
     ])
 
-    results.push(`Amount dispensed: ${valueDesired}`)
+    results.push(`Amount dispensed: $${valueDesired}`)
     if(currBalance < 0){
         results.push(`You have been charged an overdraft fee of $5. ${getBalance()[0]}`)
     } else {
