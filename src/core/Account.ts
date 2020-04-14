@@ -2,6 +2,7 @@ export class Account {
     accountId: string;
     pin: string;
     balance: number;
+    history: {}[] = [];
 
     constructor(
         accountId: string,

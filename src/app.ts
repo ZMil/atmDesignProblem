@@ -6,15 +6,20 @@ import readline from 'readline'
 
 import {
     handleAuthorizeCommand,
-    unAuthorize,
     isAuthorized
-} from './core/authorize'
+} from './core/accounts'
 
 import {
     getBalance as handleBalanceCommand
 } from './core/balance'
+import { handleWithdrawlCommand } from './core/withdraw'
+import { handleDepositCommand } from './core/deposit'
+import { handleLogout } from './core/logout'
+import { handleHistoryCommand } from './core/history'
+import { getAccountsAsync } from './core/repositories/accountsRepository'
 
-clear();
+getAccountsAsync()
+clear()
 
 console.log(
   chalk.yellow(
@@ -25,6 +30,7 @@ console.log(
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
+  terminal: false,
   prompt: 'ATM> '
 });
 
@@ -32,10 +38,9 @@ rl.prompt();
 
 rl.on('line', (line) => {
     const splitLineArray = line.split(' ')
-    const command = splitLineArray[0]
+    const command = splitLineArray[0].toLocaleLowerCase()
     // shift removes 1st element, "shifts" array over one
     splitLineArray.shift()
-
     if(
         command !== 'authorize' &&
         command !== 'logout' &&
@@ -44,32 +49,38 @@ rl.on('line', (line) => {
     ) {
         console.log('Authorization required.')
         rl.prompt()
+        return
     }
+
+    let printResponses: string[] = []
 
     switch (command) {
         case 'authorize':
-            handleAuthorizeCommand(splitLineArray)
+            printResponses = handleAuthorizeCommand(splitLineArray)
             break;
         case 'withdraw':
-
+            printResponses = handleWithdrawlCommand(splitLineArray)
             break;
         case 'deposit':
-
+            printResponses = handleDepositCommand(splitLineArray)
             break;
         case 'balance':
-            handleBalanceCommand()
+            printResponses = handleBalanceCommand()
             break;
         case 'history':
-        
+            printResponses = handleHistoryCommand()
             break;
         case 'logout':
-            
+            printResponses = handleLogout()
             break;
         case 'end':
             process.exit(0);
         default:
-            console.log(`Say what? I might have heard '${line.trim()}'`);
+            printResponses.push(`Sorry, '${line.trim()}' is not a valid command`)
             break;
+    }
+    for(const response of printResponses) {
+        console.log(response)
     }
     rl.prompt();
 }).on('close', () => {

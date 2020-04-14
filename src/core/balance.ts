@@ -1,12 +1,10 @@
-import { getCurrAccountId } from './authorize'
-import { getAccounts } from './accountsRepository'
+import { getCurrAccountId } from './accounts'
+import { getAccounts } from './repositories/accountsRepository'
 import { Account } from './Account'
 
-export const getBalance = () => {
+export const getBalance = (): string[] => {
     const accountId = getCurrAccountId()
-    getAccounts()
-        .then(accounts => {
-            const currAccount:Account = accounts[accountId]
-            console.log(`Current balance: ${currAccount.balance}`)
-        })
+    const accounts = getAccounts()
+    const currAccount:Account = accounts[accountId]
+    return [`Current balance: ${currAccount.balance}`]
 }
