@@ -1,4 +1,4 @@
-# Zach Milrod Takehome for Takeoff
+# Zach Milrod ATM Design Problem
 
 ## To run:
 - `yarn` (or `npm`)
